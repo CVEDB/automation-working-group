@@ -1,6 +1,6 @@
 # DRAFT - CVE ID JSON File Format 4.0
 
-This describes the CVE ID JSON format version 4.0, this file format primarily covers CVE ID but also CVE Mentors and CNAs
+This describes the CVE ID JSON format version 4.0, and this file format primarily covers CVE ID but also CVE Mentors and CNAs.
 
 CVE_* is a reserved keyword. Essentially every CVE ID file is a JSON Object that contains more top level objects which in turn contain objects/arrays/booleans/etc. We have some required top level objects: CVE_data_type (what is this file?), CVE_data_format (who’s format is it in?) and CVE_data_version (what version of the data format is this?) for all types.
 
@@ -22,11 +22,11 @@ Data may be Unicode encoded, titles, descriptions, researcher names, version num
 
 ## UUencoded data
 
-File objects associated with CVEs may sometimes be embedded within the JSON data as a UUncoded object (optionally zip compressed and password protected in the case where the data may trigger an AV scanner for example). Again, this data may be dangerous or actively hostile depending on what software you use to process it.
+File objects associated with CVE IDs may sometimes be embedded within the JSON data as a UUncoded object (optionally zip compressed and password protected in the case where the data may trigger an AV scanner for example). Again, this data may be dangerous or actively hostile depending on what software you use to process it.
 
 ## Base64 data
 
-File objects associated with CVEs may sometimes be embedded within the JSON data as a Base64 object (optionally zip compressed and password protected in the case where the data may trigger an AV scanner for example). Again, this data may be dangerous or actively hostile depending on what software you use to process it.
+File objects associated with CVE IDs may sometimes be embedded within the JSON data as a Base64 object (optionally zip compressed and password protected in the case where the data may trigger an AV scanner for example). Again, this data may be dangerous or actively hostile depending on what software you use to process it.
 
 ## Multiple line strings
 
@@ -117,7 +117,7 @@ INT - starts at 1, add 1 every time an entry is updated or changed
 
 JSON data type: string
 
-### CVE_ID
+### ID
 
 CVE-YEAR-NNNNNNN - the CVE ID in the format listed in http://cve.mitre.org/cve/identifiers/syntaxchange.html#new
 
@@ -143,7 +143,7 @@ JSON data type: string
 
 ### REQUESTER
 
-Requestor ID - the requestor of the CVE (email address)
+Requester ID - the requester of the CVE (email address)
 
 JSON data type: string
 
@@ -155,7 +155,7 @@ JSON data type: string
 
 ### REPLACED_BY
 
-replaced by data - a single CVE or list of CVEs (comma separated) 
+replaced by data - a single CVE ID or list of CVE IDs (comma separated) 
 
 JSON data type: string
 
@@ -277,7 +277,29 @@ The version name/value (e.g. 10.0, 3.1, "IceHouse")
 
 #### version_affected
 
-A string value such as "=" (just that version is affected), "!" (not affected), <, >, <=, >=, !>, !<, !=>, !=<
+A string value such as "=" (just that version is affected), "!" (not affected), "?" (unknown),  <, >, <=, >=, !>, !<, !=>, !=<, ?>, ?<, ?<=, ?>=.
+
+| version_affected | definition |
+|----------|---------------|
+| = | affects **version_value** |
+| <  | affects versions prior to **version_value** |
+| > | affects versions later than **version_value** |
+| <= | affects **version_value** and prior versions |
+| >= | affects **version_value** and later versions |
+| ! | doesn't affect **version_value** |
+| !< | doesn't affect versions prior to **version_value** |
+| !> | doesn't affect versions later than **version_value** |
+| !<= | doesn't affect **version_value** and prior versions |
+| !>= | doesn't affect **version_value** and later versions |
+| ? | status of **version_value** is unknown |
+| ?< | status of versions prior to **version_value** is unknown |
+| ?> | status of versions later than **version_value** is unknown |
+| ?<= | status of **version_value** and prior versions is unknown |
+| ?>= | status of **version_value** and later versions is unknown |
+
+?, ?<, ?<= may be used to state that a vulnerability has not been evaluated on certain versions such as unsupported versions.
+
+?>, ?>= can be used to indicate unfixed vulnerabilities, where it is not known if a future version will ever have a fix.
 
 ## affects_CPE
 
@@ -759,7 +781,7 @@ The following are a minimal example (as defined by MITRE in the CVE CNA Guidelin
 	"data_format": "MITRE",
 	"data_version": "4.0",
 	"CVE_data_meta": {
-		"ID": "CVE-YYYY-NNNNNN"
+		"ID": "CVE-YYYY-NNNNNN",
 		"ASSIGNER": "Example email address"
 	},
 	"affects": {
@@ -862,32 +884,32 @@ The following are a minimal example (as defined by MITRE in the CVE CNA Guidelin
 	"references":{
 		"reference_data":[
 			{
-				"url":"MISC:http://ia.cr/2007/474"
+				"url":"http://ia.cr/2007/474"
 			},
 			{
-				"url":"MISC:http://shattered.io/"
+				"url":"http://shattered.io/"
 			},
 			{
-				"url":"MISC:http://www.cwi.nl/news/2017/cwi-and-google-announce-first-collision-industry-security-standard-sha-1"
+				"url":"http://www.cwi.nl/news/2017/cwi-and-google-announce-first-collision-industry-security-standard-sha-1"
 			},
 			{
-				"url":"MISC:https://arstechnica.com/security/2017/02/at-deaths-door-for-years-widely-used-sha1-function-is-now-dead/"
+				"url":"https://arstechnica.com/security/2017/02/at-deaths-door-for-years-widely-used-sha1-function-is-now-dead/"
 			},
 			{
-				"url":"MISC:https://security.googleblog.com/2015/12/an-update-on-sha-1-certificates-in.html"
+				"url":"https://security.googleblog.com/2015/12/an-update-on-sha-1-certificates-in.html"
 			},
 			{
-				"url":"MISC:https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html"
+				"url":"https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html"
 			},
 			{
-				"url":"MISC:https://sites.google.com/site/itstheshappening"
+				"url":"https://sites.google.com/site/itstheshappening"
 			},
 			{
-				"url":"MISC:https://www.schneier.com/blog/archives/2005/02/sha1_broken.html"
+				"url":"https://www.schneier.com/blog/archives/2005/02/sha1_broken.html"
 			},
 			{
-				"url":"MISC:https://www.schneier.com/blog/archives/2005/08/new_cryptanalyt.html"
-			},
+				"url":"https://www.schneier.com/blog/archives/2005/08/new_cryptanalyt.html"
+			}
 		]
 	},
 	"description":{
@@ -975,7 +997,7 @@ The following are a minimal example (as defined by MITRE in the CVE CNA Guidelin
 				},
 				{
 					"url":"https://www.schneier.com/blog/archives/2005/08/new_cryptanalyt.html"
-				},
+				}
 			]
 		},
 		"description":{
